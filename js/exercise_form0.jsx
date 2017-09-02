@@ -1,4 +1,5 @@
 import React from 'react';
+import merge from 'lodash/merge';
 
 class ExerciseForm extends React.Component {
   constructor(props) {
@@ -19,30 +20,32 @@ class ExerciseForm extends React.Component {
     this.state = {
       blanks: []
     };
-    this.genBlanks();
+    this.makeResps();
   }
 
-  genBlanks() {
+  makeResps() {
     let blanks = [];
     this.resps = this.exData.map( (problem) => {
       let respArr = problem.response.split(' ');
       let newResps = respArr.map( (segment, idx) => {
         if (segment === '[BLANK]') {
           blanks.push('');
+          let lastBlank = blanks.length - 1;
+          return (
+            <input
+              key={ idx }
+              name={ lastBlank }
+              onChange={ this.handleInputChange }
+              value={ this.state.blanks[lastBlank]}
+              />
+          );
+        } else {
+          return <div key={ idx }>{segment}</div>;
         }
       });
-      // Alternatively, you could push '' to blanks the number of times there are answers, or have this number calculated in the database and send it with the other info;
+      this.state = { blanks: blanks};
+      return newResps;
     });
-    let newState = Object.assign({}, this.state, { blanks });
-    this.state = newState;
-  }
-
-  render() {
-    return (
-      <form onSubmit={ this.handleSubmit }>
-        {this.questions()}
-      </form>
-    );
   }
 
   questions() {
@@ -50,37 +53,23 @@ class ExerciseForm extends React.Component {
       return (
         <div key={idx}>
           <div>{idx+1}. { problem.question }</div>
-          <div>{ this.responses()[idx]}</div>
+          <div>{ this.resps[idx]}</div>
         </div>
       );
     });
   }
 
-  responses() {
-    let blanksCount = -1;
-    let resps = this.exData.map( (problem) => {
-      let respArr = problem.response.split(' ');
-      let newResps = respArr.map( (segment, idx) => {
-        if (segment === '[BLANK]') {
-          blanksCount += 1;
-          return (
-            <input
-              key={ idx }
-              name={ blanksCount }
-              onChange={ this.handleInputChange }
-              value={ this.state.blanks[blanksCount]}
-            />
-          );
-        } else {
-          return <div key={ idx }>{segment}</div>;
-        }
-      });
-      return newResps;
-    });
-    return resps;
+  render() {
+    debugger;
+    return (
+      <form onSubmit={ this.handleSubmit }>
+        {this.questions()}
+      </form>
+    );
   }
 
   handleInputChange(event) {
+
     const idx = Number(event.target.name);
     const value = event.target.value;
     let newBlanks = Object.assign([], this.state.blanks);
