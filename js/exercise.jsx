@@ -1,6 +1,7 @@
 import React from 'react';
 import ExerciseForm from './exercise_form.jsx';
 import NewForm from './new_form.jsx';
+import NewForm0 from './new_form0.jsx';
 
 const Exercise = (props) => {
   return (
@@ -10,7 +11,7 @@ const Exercise = (props) => {
       </header>
       <ExerciseForm />
       New Form:
-      <NewForm />
+      <NewForm0 />
     </div>
   );
 

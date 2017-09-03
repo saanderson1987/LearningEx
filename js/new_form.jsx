@@ -1,10 +1,10 @@
 import React from 'react';
+import CompleteForm from './complete_form.jsx';
 
 class NewForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleAnswerInput = this.handleAnswerInput.bind(this);
     this.handleResponseInput = this.handleResponseInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.addBlank = this.addBlank.bind(this);
@@ -17,15 +17,16 @@ class NewForm extends React.Component {
   }
 
   response() {
-    let blankCount = this.state.answers.length -1;
+    let blankCount = -1;
     return this.state.response.map( (part, idx) => {
       if (part === '[BLANK]') {
+        blankCount ++;
         return (
           <input
             key={ idx }
             name={ blankCount }
             value={ this.state.answers[blankCount] }
-            onChange={ this.handleAnswerInput }
+            onChange={ this.handleResponseInput('answers') }
           />
         );
       } else {
@@ -34,7 +35,7 @@ class NewForm extends React.Component {
             key={ idx }
             name={ idx }
             value={ this.state.response[idx] }
-            onChange={ this.handleResponseInput }
+            onChange={ this.handleResponseInput('response') }
           />
         );
       }
@@ -49,21 +50,20 @@ class NewForm extends React.Component {
           name='question'
           value={ this.state.question }
           onChange={ this.handleInputChange }
-        />
+          />
         Response:
         {this.response()}
-      <button onClick={ this.addBlank }>Add Blank</button>
-    </form>
+        <button onClick={ this.addBlank }>Add Blank</button>
+      </form>
     );
   }
 
   addBlank(event) {
-    let newAnswers = Object.assign([], this.state.answers);
-    newAnswers.push('');
-    this.setState({ answers: newAnswers });
-    let newResponse = Object.assign([], this.state.response);
-    newResponse.push('[BLANK]');
-    this.setState({ response: newResponse });
+    let answers = Object.assign([], this.state.answers);
+    answers.push('');
+    let response = Object.assign([], this.state.response);
+    response.push('[BLANK]');
+    this.setState({ response, answers });
   }
 
   handleInputChange(event) {
@@ -72,24 +72,19 @@ class NewForm extends React.Component {
     this.setState( { [name]: value });
   }
 
-  handleAnswerInput(event) {
-    const idx = event.target.name;
-    const value = event.target.value;
-    const newAnswers = Object.assign([], this.state.answers);
-    newAnswers[idx] = value;
-    this.setState({ answers: newAnswers });
-  }
-
-  handleResponseInput(event) {
-    const idx = event.target.name;
-    const value = event.target.value;
-    const newResponse = Object.assign([], this.state.response);
-    newResponse[idx] = value;
-    this.setState({ response: newResponse });
+  handleResponseInput(valType) {
+    return (event) => {
+      const idx = event.target.name;
+      const value = event.target.value;
+      const newVal = Object.assign([], this.state[valType]);
+      newVal[idx] = value;
+      this.setState({ [valType]: newVal});
+    };
   }
 
   handleSubmit(event) {
     event.preventDefault();
+
   }
 
 }

@@ -22444,6 +22444,10 @@ var _new_form = __webpack_require__(283);
 
 var _new_form2 = _interopRequireDefault(_new_form);
 
+var _new_form3 = __webpack_require__(286);
+
+var _new_form4 = _interopRequireDefault(_new_form3);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Exercise = function Exercise(props) {
@@ -22462,7 +22466,7 @@ var Exercise = function Exercise(props) {
     ),
     _react2.default.createElement(_exercise_form2.default, null),
     'New Form:',
-    _react2.default.createElement(_new_form2.default, null)
+    _react2.default.createElement(_new_form4.default, null)
   );
 };
 
@@ -22697,6 +22701,10 @@ var _react = __webpack_require__(41);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _complete_form = __webpack_require__(285);
+
+var _complete_form2 = _interopRequireDefault(_complete_form);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -22716,7 +22724,6 @@ var NewForm = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (NewForm.__proto__ || Object.getPrototypeOf(NewForm)).call(this, props));
 
     _this.handleInputChange = _this.handleInputChange.bind(_this);
-    _this.handleAnswerInput = _this.handleAnswerInput.bind(_this);
     _this.handleResponseInput = _this.handleResponseInput.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.addBlank = _this.addBlank.bind(_this);
@@ -22734,21 +22741,22 @@ var NewForm = function (_React$Component) {
     value: function response() {
       var _this2 = this;
 
-      var blankCount = this.state.answers.length - 1;
+      var blankCount = -1;
       return this.state.response.map(function (part, idx) {
         if (part === '[BLANK]') {
+          blankCount++;
           return _react2.default.createElement('input', {
             key: idx,
             name: blankCount,
             value: _this2.state.answers[blankCount],
-            onChange: _this2.handleAnswerInput
+            onChange: _this2.handleResponseInput('answers')
           });
         } else {
           return _react2.default.createElement('input', {
             key: idx,
             name: idx,
             value: _this2.state.response[idx],
-            onChange: _this2.handleResponseInput
+            onChange: _this2.handleResponseInput('response')
           });
         }
       });
@@ -22777,12 +22785,11 @@ var NewForm = function (_React$Component) {
   }, {
     key: 'addBlank',
     value: function addBlank(event) {
-      var newAnswers = Object.assign([], this.state.answers);
-      newAnswers.push('');
-      this.setState({ answers: newAnswers });
-      var newResponse = Object.assign([], this.state.response);
-      newResponse.push('[BLANK]');
-      this.setState({ response: newResponse });
+      var answers = Object.assign([], this.state.answers);
+      answers.push('');
+      var response = Object.assign([], this.state.response);
+      response.push('[BLANK]');
+      this.setState({ response: response, answers: answers });
     }
   }, {
     key: 'handleInputChange',
@@ -22792,22 +22799,17 @@ var NewForm = function (_React$Component) {
       this.setState(_defineProperty({}, name, value));
     }
   }, {
-    key: 'handleAnswerInput',
-    value: function handleAnswerInput(event) {
-      var idx = event.target.name;
-      var value = event.target.value;
-      var newAnswers = Object.assign([], this.state.answers);
-      newAnswers[idx] = value;
-      this.setState({ answers: newAnswers });
-    }
-  }, {
     key: 'handleResponseInput',
-    value: function handleResponseInput(event) {
-      var idx = event.target.name;
-      var value = event.target.value;
-      var newResponse = Object.assign([], this.state.response);
-      newResponse[idx] = value;
-      this.setState({ response: newResponse });
+    value: function handleResponseInput(valType) {
+      var _this3 = this;
+
+      return function (event) {
+        var idx = event.target.name;
+        var value = event.target.value;
+        var newVal = Object.assign([], _this3.state[valType]);
+        newVal[idx] = value;
+        _this3.setState(_defineProperty({}, valType, newVal));
+      };
     }
   }, {
     key: 'handleSubmit',
@@ -22820,6 +22822,316 @@ var NewForm = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = NewForm;
+
+/***/ }),
+/* 284 */,
+/* 285 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(41);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ExerciseForm = function (_React$Component) {
+  _inherits(ExerciseForm, _React$Component);
+
+  function ExerciseForm(props) {
+    _classCallCheck(this, ExerciseForm);
+
+    var _this = _possibleConstructorReturn(this, (ExerciseForm.__proto__ || Object.getPrototypeOf(ExerciseForm)).call(this, props));
+
+    _this.handleInputChange = _this.handleInputChange.bind(_this);
+    var blanks = _this.genBlanks(_this.props);
+    _this.state = {
+      blanks: blanks
+    };
+    return _this;
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   let blanks = this.genBlanks(nextProps);
+  //   this.setState({ blanks });
+  // }
+
+  _createClass(ExerciseForm, [{
+    key: 'genBlanks',
+    value: function genBlanks(props) {
+      var blanks = [];
+      if (props.problems) {
+        props.problems.forEach(function (problem) {
+          problem.answers.forEach(function (answer) {
+            blanks.push('');
+          });
+        });
+      }
+      return blanks;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'form',
+        { onSubmit: this.handleSubmit },
+        this.renderProblems()
+      );
+    }
+  }, {
+    key: 'renderProblems',
+    value: function renderProblems() {
+      var _this2 = this;
+
+      return this.props.problems.map(function (problem, idx) {
+        return _react2.default.createElement(
+          'div',
+          { key: idx },
+          _react2.default.createElement(
+            'div',
+            null,
+            idx + 1,
+            '. ',
+            problem.question
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _this2.renderResponse(idx)
+          )
+        );
+      });
+    }
+  }, {
+    key: 'renderResponse',
+    value: function renderResponse(problemIdx) {
+      var _this3 = this;
+
+      var problem = this.props.problems[problemIdx];
+      var respBlankCount = -1;
+      return problem.response.map(function (part, idx) {
+        if (part === '[BLANK]') {
+          respBlankCount++;
+          return _react2.default.createElement('input', {
+            key: idx,
+            name: respBlankCount,
+            value: _this3.state.blanks[respBlankCount],
+            onChange: _this3.handleInputChange
+          });
+        } else {
+          return _react2.default.createElement(
+            'div',
+            { key: idx },
+            part
+          );
+        }
+      });
+    }
+  }, {
+    key: 'handleInputChange',
+    value: function handleInputChange(event) {
+      var idx = Number(event.target.name);
+      var value = event.target.value;
+      var newBlanks = Object.assign([], this.state.blanks);
+      newBlanks[idx] = value;
+      this.setState({ blanks: newBlanks });
+    }
+  }]);
+
+  return ExerciseForm;
+}(_react2.default.Component);
+
+exports.default = ExerciseForm;
+
+/***/ }),
+/* 286 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(41);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _complete_form = __webpack_require__(285);
+
+var _complete_form2 = _interopRequireDefault(_complete_form);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NewForm0 = function (_React$Component) {
+  _inherits(NewForm0, _React$Component);
+
+  function NewForm0(props) {
+    _classCallCheck(this, NewForm0);
+
+    var _this = _possibleConstructorReturn(this, (NewForm0.__proto__ || Object.getPrototypeOf(NewForm0)).call(this, props));
+
+    _this.handleInputChange = _this.handleInputChange.bind(_this);
+    _this.handleResponseInput = _this.handleResponseInput.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.addBlank = _this.addBlank.bind(_this);
+    _this.state = {
+      problems: [{
+        question: '',
+        response: [''],
+        answers: []
+      }]
+    };
+
+    return _this;
+  }
+
+  _createClass(NewForm0, [{
+    key: 'renderResponse',
+    value: function renderResponse(problemIdx) {
+      var _this2 = this;
+
+      var problem = this.state.problems[problemIdx];
+      var respBlankCount = -1;
+      return problem.response.map(function (part, idx) {
+        if (part === '[BLANK]') {
+          respBlankCount++;
+          return _react2.default.createElement('input', {
+            key: idx,
+            name: respBlankCount,
+            value: problem.answers[respBlankCount],
+            onChange: _this2.handleResponseInput('answers', problemIdx)
+          });
+        } else {
+          return _react2.default.createElement('input', {
+            key: idx,
+            name: idx,
+            value: problem.response[idx],
+            onChange: _this2.handleResponseInput('response', problemIdx)
+          });
+        }
+      });
+    }
+  }, {
+    key: 'renderProblems',
+    value: function renderProblems() {
+      var _this3 = this;
+
+      return this.state.problems.map(function (problem, idx) {
+        return _react2.default.createElement(
+          'div',
+          { key: idx },
+          'Question:',
+          _react2.default.createElement('input', {
+            name: 'question',
+            value: _this3.state.problems[idx].question,
+            onChange: _this3.handleInputChange(idx)
+          }),
+          'Response:',
+          _this3.renderResponse(idx),
+          _react2.default.createElement(
+            'button',
+            { onClick: _this3.addBlank(idx) },
+            'Add Blank'
+          )
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'form',
+          { onSubmit: this.handleSubmit },
+          this.renderProblems()
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.showForm },
+          'Generate Form'
+        ),
+        _react2.default.createElement(_complete_form2.default, { problems: this.state.problems })
+      );
+    }
+  }, {
+    key: 'addBlank',
+    value: function addBlank(problemIdx) {
+      var _this4 = this;
+
+      return function (event) {
+        var problems = Object.assign([], _this4.state.problems);
+        problems[problemIdx].answers.push('');
+        problems[problemIdx].response.push('[BLANK]');
+        _this4.setState({ problems: problems });
+      };
+    }
+  }, {
+    key: 'showForm',
+    value: function showForm() {}
+  }, {
+    key: 'handleInputChange',
+    value: function handleInputChange(problemIdx) {
+      var _this5 = this;
+
+      return function (event) {
+        var name = event.target.name;
+        var value = event.target.value;
+        var problems = Object.assign([], _this5.state.problems);
+        problems[problemIdx].question = value;
+        _this5.setState({ problems: problems });
+      };
+    }
+  }, {
+    key: 'handleResponseInput',
+    value: function handleResponseInput(valType, problemIdx) {
+      var _this6 = this;
+
+      return function (event) {
+        var idx = event.target.name;
+        var value = event.target.value;
+        var problems = Object.assign([], _this6.state.problems);
+        problems[problemIdx][valType][idx] = value;
+        _this6.setState({ problems: problems });
+      };
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      event.preventDefault();
+    }
+  }]);
+
+  return NewForm0;
+}(_react2.default.Component);
+
+exports.default = NewForm0;
 
 /***/ })
 /******/ ]);
